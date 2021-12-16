@@ -97,8 +97,12 @@ tasks.register("removeObsoleteJars") {
     }
 }
 
+tasks.withType( JavaCompile ).configureEach {
+    options.forkOptions.jvmArgs.addAll( ['--add-opens', 'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED'] )
+}
+
 tasks.register("gem"){
-    dependsOn [downloadAndInstallJRuby, removeObsoleteJars, vendor, generateRubySupportFiles]
+    dependsOn=[downloadAndInstallJRuby, removeObsoleteJars, vendor, generateRubySupportFiles]
     doLast {
         buildGem(projectDir, buildDir, pluginInfo.pluginFullName() + ".gemspec")
     }
